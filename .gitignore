@@ -1,0 +1,9 @@
+x
+x.exe
+main
+main.exe
+*.bak
+ReadeMe
+test_*.go
+*_test.go
+609.log
