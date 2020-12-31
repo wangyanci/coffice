@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .radius{
+            margin-bottom:20px;
+        }
+        .radius:nth-of-type(1){
+            width:100px;
+            height:30px;
+            background-color:#0c9;
+            border-radius:30px 6px;
+        }
+
+        .radius:nth-of-type(2){
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            width:60px;
+            height:60px;
+            background-color:#0c9;
+            border-radius: 30px 30px 30px 30px / 12px 12px 45px 45px;
+
+            color:#fff;
+        }
+
+
+        .radius:nth-of-type(3){
+            width:60px;
+            height:50px;
+            background-color:#0c9;
+            border-radius: 30px 60px 30px 20px / 30px 50px 30px 20px;
+        }
+
+        .train{
+            display:flex;
+        }
+        .train .item{
+            position:relative;
+            width:50px;
+            height:20px;
+            background-color:#09f;
+            margin-left:2px;
+            border-radius:3px;
+        }
+
+        .train .item:first-child{
+            border-radius:80% 6% 6% 40% / 75% 15% 15% 25%;
+        }
+
+        .train .item:first-child:before{
+            position:absolute;
+            content:'';
+            width:12px;
+            height:6px;
+            background-color:#fff;
+            border-radius:inherit;
+            top:5px;
+            right:25px;
+        }
+
+
+
+        .train .item:last-child{
+            border-radius:6% 80% 40% 6%/ 15% 75% 25% 15%;
+        }
+
+        .train .item:last-child:before{
+            position:absolute;
+            content:'';
+            width:12px;
+            height:6px;
+            background-color:#fff;
+            border-radius:inherit;
+            top:5px;
+            left:25px;
+        }
+    </style>
+</head>
+<body>
+<div class="radius"></div>
+<div class="radius">我是<br />盾牌</div>
+<div class="radius"></div>
+<div class="train">
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+</div>
+</body>
+</html>

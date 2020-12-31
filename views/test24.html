@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+http://jsrun.net/kDhKp/edit
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            -webkit-appearance: none;
+            margin: 0;
+            padding: 0
+        }
+
+        .wrapper {
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card_wrap {
+            height: 450px;
+            position: relative;
+            overflow: hidden;
+            display: none
+        }
+
+        .card_cont {
+            width: 100%;
+            height: 400px;
+            margin: 0 auto;
+            position: absolute;
+            transition: all ease .5s;
+            -webkit-transition: all ease .5s;
+            -moz-transition: all ease .5s;
+            -ms-transition: all ease .5s;
+            transform: scale(0, 0);
+            -moz-transform: scale(0, 0);
+            -ms-transform: scale(0, 0);
+            -o-transform: scale(0, 0);
+            -webkit-transform: scale(0, 0);
+            display: none;
+            bottom: 0;
+        }
+
+        .card {
+            padding: 20px;
+        }
+
+        .card_cont.card1 {
+            display: block;
+            transform: scale(1, 1) translate(0, 0) !important;
+            -ms-transform: scale(1, 1) translate(0, 0) !important;
+            -moz-transform: scale(1, 1) translate(0, 0) !important;
+            -webkit-transform: scale(1, 1) translate(0, 0) !important;
+        }
+
+        .card_cont.card2 {
+            display: block;
+            transform: scale(.85, .85) translate(0, -62px) !important;
+            -ms-transform: scale(.85, .85) translate(0, -62px) !important;
+            -moz-transform: scale(.85, .85) translate(0, -62px) !important;
+            -webkit-transform: scale(.85, .85) translate(0, -62px) !important;
+        }
+
+        .card_cont.card3 {
+            display: block;
+            transform: scale(.72, .72) translate(0, -135px) !important;
+            -ms-transform: scale(.72, .72) translate(0, -135px) !important;
+            -moz-transform: scale(.72, .72) translate(0, -135px) !important;
+            -webkit-transform: scale(.72, .72) translate(0, -135px) !important;
+        }
+
+        .card_cont.cardn {
+            display: block;
+            transform: translate(0, -1000px) !important;
+            -moz-transform: translate(0, -1000px) !important;
+            -ms-transform: translate(0, -1000px) !important;
+            -webkit-transform: translate(0, -1000px) !important;
+        }
+
+        .question span {
+            margin-left: -1em
+        }
+
+
+        /*Radio Specific styles*/
+
+        input[type='radio'] {
+            display: none;
+            cursor: pointer;
+        }
+
+        input[type='radio']:focus,
+        input[type='radio']:active {
+            outline: none;
+        }
+
+        input[type='radio']+label {
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            padding-left: 28px;
+        }
+
+        input[type='radio']:checked+label {
+            color: #c733c5 !important;
+        }
+
+        input[type='radio']+label:before,
+        input[type='radio']+label:after {
+            content: '';
+            font-family: helvetica;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            left: 0;
+            top: 0;
+            text-align: center;
+            position: absolute;
+        }
+
+        input[type='radio']+label:before {
+            background-color: transparent;
+        }
+
+        input[type='radio']+label:after {
+            color: #c733c5;
+        }
+
+        input[type='radio']:checked+label:before {
+            -moz-box-shadow: inset 0 0 0 5px #fff;
+            -webkit-box-shadow: inset 0 0 5px #fff;
+            box-shadow: inset 0 0 0 5px #fff;
+            border: 1px solid #c733c5;
+            background-color: #c733c5;
+        }
+
+        input[type='radio']+label:before {
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            border-radius: 50%;
+            border: 1px solid #c733c5;
+        }
+
+        input[type='radio']+label:hover:after {
+            color: #c733c5;
+        }
+
+        input[type='radio']:checked+label:after,
+        input[type='radio']:checked+label:hover:after {
+            color: #c733c5;
+        }
+
+
+    </style>
+</head>
+<body>
+<div id="answer" class="card_wrap m-3">
+    <!--Q1-->
+    <div class="card_cont card1">
+        <div class="card">
+            Q1.
+            <hr>
+            <input id="q1_1" type="radio" name="r-group-1">
+            <label for="q1_1">
+                JavaScript
+            </label>
+            <input id="q1_2" type="radio" name="r-group-1">
+            <label for="q1_2">
+                C语言
+            </label>
+            <hr>
+            1/5
+        </div>
+    </div>
+    <!--Q2-->
+    <div class="card_cont card2">
+        <div class="card">
+            Q2.
+            <hr>
+            <input id="q2_1" type="radio" name="r-group-2">
+            <label for="q2_1">
+                Web前端
+            </label>
+            <input id="q2_1" type="radio" name="r-group-2">
+            <label for="q2_1">
+                Web前端
+            </label>
+            <hr>
+            <a class="prev">
+                上一题
+            </a>
+            2/5
+        </div>
+    </div>
+    <!--Q3-->
+    <div class="card_cont card3">
+        <div class="card">
+            Q3.
+            <hr>
+            <input id="q3_1" type="radio" name="r-group-3">
+            <label for="q3_1">
+                何问起
+            </label>
+            <input id="q3_2" type="radio" name="r-group-3">
+            <label for="q3_2">
+                博客园
+            </label>
+            <hr>
+            <a class="prev">
+                上一题
+            </a>
+            3/5
+        </div>
+    </div>
+    <!--Q4-->
+    <div class="card_cont">
+        <div class="card">
+            Q4.
+            <hr>
+            <input id="q4_1" type="radio" name="r-group-4">
+            <label for="q4_1">
+                Windows 10
+            </label>
+            <input id="q4_2" type="radio" name="r-group-4">
+            <label for="q4_2">
+                Windows 7
+            </label>
+            <hr>
+            <a class="prev">
+                上一题
+            </a>
+            4/5
+        </div>
+    </div>
+    <!--Q5-->
+    <div class="card_cont">
+        <div class="card">
+            Q5.
+            <hr>
+            <input id="q5_1" type="radio" name="r-group-5">
+            <label for="q5_1">
+                网页特效
+            </label>
+            <input id="q5_2" type="radio" name="r-group-5">
+            <label for="q5_2">
+                3D
+            </label>
+            <hr>
+            <a class="prev">
+                上一题
+            </a>
+            5/5
+        </div>
+    </div>
+    <!--6-->
+    <div class="card_cont">
+        <div class="card">
+            测试结果：
+            <hr>
+            <p>
+                感谢参与！
+            </p>
+            <input id="q5_1" type="radio" name="r-group-5">
+            <label for="q5_1">
+                点击不再翻页
+            </label>
+            <hr>
+            <a class="prev">
+                上一题
+            </a>
+        </div>
+    </div>
+</div>
+<!--/card_wrap-->
+
+<script>
+    $(function() {
+        $("#answer").answerSheet({});
+    })
+</script>
+<script>
+    $.fn.answerSheet = function (options) {
+        var defaults = {
+            mold: 'card',
+        };
+        var opts = $.extend({},
+                defaults, options);
+        //console.log($(this).attr("class"));
+        return $(this).each(function () {   //
+            var obj = $(this).find('.card_cont');
+            //初始化参数
+            var _length = obj.length,
+                    _len_for_z_index = _length - 1,  //设置层叠顺序时，当作指针
+                    _cont = '.card_cont';
+            for (var a = 1; a <= _length; a++) { //设置层叠顺序
+                obj.eq(_len_for_z_index).css({
+                    'z-index': a
+                });
+                _len_for_z_index -= 1;
+            }
+            $(this).show();
+            if (opts.mold == 'card') {
+                obj.find('label').click(function () {
+                    var _idx = $(this).parents(_cont).index(), //获得被点击的父元素相对于它的同级元素的index
+                            _cards = obj,
+                            _cardcont = $(this).parents(_cont);
+                    if (_idx == _length - 1) { //判断，若是最后一页就不再翻页
+                        return;
+                    } else {
+                        setTimeout(function () {
+                                    _cardcont.addClass('cardn');
+                                    setTimeout(function () {
+                                                _cards.eq(_idx + 3).addClass('card3');
+                                                _cards.eq(_idx + 2).removeClass('card3').addClass('card2');
+                                                _cards.eq(_idx + 1).removeClass('card2').addClass('card1');
+                                                _cardcont.removeClass('card1');
+                                            },
+                                            200);
+                                },
+                                100);
+                    }
+                });
+                $('.card').find('.prev').click(function () {
+                    var _idx = $(this).parents(_cont).index(),
+                            _cardcont = $(this).parents(_cont);
+                    obj.eq(_idx + 2).removeClass('card3').removeClass('cardn');
+                    obj.eq(_idx + 1).removeClass('card2').removeClass('cardn').addClass('card3');
+                    obj.eq(_idx).removeClass('card1').removeClass('cardn').addClass('card2');
+
+                    setTimeout(function () {
+                                obj.eq(_idx - 1).addClass('card1').removeClass('cardn');
+                            },
+                            200);
+                })
+            }
+        });
+    };
+</script>
+</body>
+</html>

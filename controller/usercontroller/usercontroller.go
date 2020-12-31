@@ -3,34 +3,34 @@ package usercontroller
 import (
 	"fmt"
 
-	"github.com/astaxie/beego"
+	"github.com/wangyanci/coffice/controller"
 )
 
 type UserController struct {
-	beego.Controller
+	controller.BaseController
 }
 
-func(this *UserController) CreateUser() {
+func (this *UserController) CreateUser() {
 	this.Ctx.WriteString("create user!")
 }
 
-func(this *UserController) ListUser() {
+func (this *UserController) ListUser() {
 	this.Ctx.WriteString("get user list!")
 }
 
-func(this *UserController) GetUserById() {
+func (this *UserController) GetUserById() {
 	id := this.Ctx.Input.Param(":id")
 	resp := fmt.Sprintf("get user by id %s!", id)
 	this.Ctx.WriteString(resp)
 }
 
-func(this *UserController) DeleteUserById() {
+func (this *UserController) DeleteUserById() {
 	id := this.Ctx.Input.Param(":id")
 	resp := fmt.Sprintf("delete user by id %s!", id)
 	this.Ctx.WriteString(resp)
 }
 
-func(this *UserController) UpdateUserById() {
+func (this *UserController) UpdateUserById() {
 	id := this.Ctx.Input.Param(":id")
 	resp := fmt.Sprintf("update user by id %s!", id)
 	this.Ctx.WriteString(resp)

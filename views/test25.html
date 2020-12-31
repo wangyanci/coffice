@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <scss>
+        *{
+            padding: 0;
+            margin:0;
+        }
+        .menu{
+            position:absolute;
+            width: 40px;
+            height: 40px;
+            right: 10px;
+            bottom: 10px;
+            transform: translateZ(0px);
+        /* -webkit-filter: url("#filt");*/
+        &.active .subItem li {
+        &:nth-child(1){
+             transform: rotate(-90deg);
+        .item .content{
+            transform: rotate(90deg);
+        }
+        }
+        &:nth-child(2){
+             transform: rotate(-120deg);
+        .item .content{
+            transform: rotate(120deg);
+        }
+        }
+        &:nth-child(3){
+             transform: rotate(-150deg);
+        .item .content{
+            transform: rotate(150deg);
+        }
+        }
+        &:nth-child(4){
+             transform: rotate(-180deg);
+        .item .content{
+            transform: rotate(180deg);
+        }
+        }
+        .item{
+            transform: translate(100px);
+        }
+        }
+
+        &.active .button{
+             transform: rotate(720deg);
+         }
+        .button{
+            background: #e91e63;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 30px;
+            display: flex;
+            justify-content:center;
+            align-items:center;
+            position: absolute;
+            transition: all 0.38s;
+        }
+
+        .subItem{
+            position: absolute;
+
+        li{
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            list-style:none;
+        &:nth-child(1){
+             transform: rotate(-90deg);
+        .item{
+            transition-delay: 0ms;
+        .content{
+            transition-delay: 0ms;
+            transform: rotate(810deg);
+        }
+        }
+        }
+        &:nth-child(2){
+             transform: rotate(-120deg);
+        .item{
+            transition-delay: 100ms;
+        .content{
+            transform: rotate(840deg);
+            transition-delay: 100ms;
+        }
+        }
+        }
+        &:nth-child(3){
+             transform: rotate(-150deg);
+        .item{
+            transition-delay: 200ms;
+        .content{
+            transform: rotate(870deg);
+            transition-delay: 200ms;
+        }
+        }
+        }
+        &:nth-child(4){
+             transform: rotate(-180deg);
+        .item{
+            transition-delay: 300ms;
+        .content{
+            transform: rotate(900deg);
+            transition-delay: 300ms;
+        }
+        }
+        }
+        .item{
+            border-radius: 50%;
+            background: #e91e63;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content:center;
+            align-items:center;
+            transition-property: all;
+            transition-duration: 0.38s;
+        .content{
+            transition-property: all;
+            transition-duration: 0.38s;
+        }
+        }
+        }
+        }
+        }
+    </scss>
+</head>
+<body>
+<div class="menu active">
+    <ul class="subItem">
+        <li>
+            <div class="item">
+                <div class="content">
+                    1
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="item">
+                <div class="content">
+                    2
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="item">
+                <div class="content">
+                    3
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="item">
+                <div class="content">
+                    4
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div class="button">
+        +
+    </div>
+</div>
+
+<svg>
+    <defs>
+        <filter id="filt">
+            <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="10"></feGaussianBlur>
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -7" result="filt"></feColorMatrix>
+            <feBlend in2="filt" in="SourceGraphic" result="mix"></feBlend>
+        </filter>
+    </defs>
+</svg>
+<script>
+    $(function(){
+        $('.button').click(function(){
+            $('.menu').toggleClass('active');
+        })
+    })
+</script>
+</body>
+</html>

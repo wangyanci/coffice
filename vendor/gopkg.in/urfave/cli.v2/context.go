@@ -1,10 +1,10 @@
 package cli
 
 import (
+	"context"
 	"errors"
 	"flag"
-	"os"
-	"reflect"
+	"fmt"
 	"strings"
 )
 
@@ -13,10 +13,10 @@ import (
 // can be used to retrieve context-specific args and
 // parsed command-line options.
 type Context struct {
+	context.Context
 	App           *App
 	Command       *Command
 	shellComplete bool
-
 	flagSet       *flag.FlagSet
 	parentContext *Context
 }
@@ -24,9 +24,18 @@ type Context struct {
 // NewContext creates a new context. For use in when invoking an App or Command action.
 func NewContext(app *App, set *flag.FlagSet, parentCtx *Context) *Context {
 	c := &Context{App: app, flagSet: set, parentContext: parentCtx}
-
 	if parentCtx != nil {
+		c.Context = parentCtx.Context
 		c.shellComplete = parentCtx.shellComplete
+		if parentCtx.flagSet == nil {
+			parentCtx.flagSet = &flag.FlagSet{}
+		}
+	}
+
+	c.Command = &Command{}
+
+	if c.Context == nil {
+		c.Context = context.Background()
 	}
 
 	return c
@@ -45,48 +54,24 @@ func (c *Context) Set(name, value string) error {
 // IsSet determines if the flag was actually set
 func (c *Context) IsSet(name string) bool {
 	if fs := lookupFlagSet(name, c); fs != nil {
-		isSet := false
-		fs.Visit(func(f *flag.Flag) {
-			if f.Name == name {
-				isSet = true
+		if fs := lookupFlagSet(name, c); fs != nil {
+			isSet := false
+			fs.Visit(func(f *flag.Flag) {
+				if f.Name == name {
+					isSet = true
+				}
+			})
+			if isSet {
+				return true
 			}
-		})
-		if isSet {
-			return true
 		}
-	}
 
-	// XXX hack to support IsSet for flags with EnvVar
-	//
-	// There isn't an easy way to do this with the current implementation since
-	// whether a flag was set via an environment variable is very difficult to
-	// determine here. Instead, we intend to introduce a backwards incompatible
-	// change in version 2 to add `IsSet` to the Flag interface to push the
-	// responsibility closer to where the information required to determine
-	// whether a flag is set by non-standard means such as environment
-	// variables is avaliable.
-	//
-	// See https://github.com/urfave/cli/issues/294 for additional discussion
-	f := lookupFlag(name, c)
-	if f == nil {
-		return false
-	}
-
-	val := reflect.ValueOf(f)
-	if val.Kind() == reflect.Ptr {
-		val = val.Elem()
-	}
-
-	envVarValues := val.FieldByName("EnvVars")
-	if !envVarValues.IsValid() {
-		return false
-	}
-
-	for _, envVar := range envVarValues.Interface().([]string) {
-		envVar = strings.TrimSpace(envVar)
-		if envVal := os.Getenv(envVar); envVal != "" {
-			return true
+		f := lookupFlag(name, c)
+		if f == nil {
+			return false
 		}
+
+		return f.IsSet()
 	}
 
 	return false
@@ -94,7 +79,7 @@ func (c *Context) IsSet(name string) bool {
 
 // LocalFlagNames returns a slice of flag names used in this context.
 func (c *Context) LocalFlagNames() []string {
-	names := []string{}
+	var names []string
 	c.flagSet.Visit(makeFlagNameVisitor(&names))
 	return names
 }
@@ -102,7 +87,7 @@ func (c *Context) LocalFlagNames() []string {
 // FlagNames returns a slice of flag names used by the this context and all of
 // its parent contexts.
 func (c *Context) FlagNames() []string {
-	names := []string{}
+	var names []string
 	for _, ctx := range c.Lineage() {
 		ctx.flagSet.Visit(makeFlagNameVisitor(&names))
 	}
@@ -112,7 +97,7 @@ func (c *Context) FlagNames() []string {
 // Lineage returns *this* context and all of its ancestor contexts in order from
 // child to parent
 func (c *Context) Lineage() []*Context {
-	lineage := []*Context{}
+	var lineage []*Context
 
 	for cur := c; cur != nil; cur = cur.parentContext {
 		lineage = append(lineage, cur)
@@ -121,8 +106,8 @@ func (c *Context) Lineage() []*Context {
 	return lineage
 }
 
-// value returns the value of the flag corresponding to `name`
-func (c *Context) value(name string) interface{} {
+// Value returns the value of the flag corresponding to `name`
+func (c *Context) Value(name string) interface{} {
 	return c.flagSet.Lookup(name).Value.(flag.Getter).Get()
 }
 
@@ -177,10 +162,10 @@ func lookupFlagSet(name string, ctx *Context) *flag.FlagSet {
 
 func copyFlag(name string, ff *flag.Flag, set *flag.FlagSet) {
 	switch ff.Value.(type) {
-	case Serializeder:
-		set.Set(name, ff.Value.(Serializeder).Serialized())
+	case Serializer:
+		_ = set.Set(name, ff.Value.(Serializer).Serialize())
 	default:
-		set.Set(name, ff.Value.String())
+		_ = set.Set(name, ff.Value.String())
 	}
 }
 
@@ -230,7 +215,59 @@ func makeFlagNameVisitor(names *[]string) func(*flag.Flag) {
 		}
 
 		if name != "" {
-			(*names) = append(*names, name)
+			*names = append(*names, name)
 		}
 	}
+}
+
+type requiredFlagsErr interface {
+	error
+	getMissingFlags() []string
+}
+
+type errRequiredFlags struct {
+	missingFlags []string
+}
+
+func (e *errRequiredFlags) Error() string {
+	numberOfMissingFlags := len(e.missingFlags)
+	if numberOfMissingFlags == 1 {
+		return fmt.Sprintf("Required flag %q not set", e.missingFlags[0])
+	}
+	joinedMissingFlags := strings.Join(e.missingFlags, ", ")
+	return fmt.Sprintf("Required flags %q not set", joinedMissingFlags)
+}
+
+func (e *errRequiredFlags) getMissingFlags() []string {
+	return e.missingFlags
+}
+
+func checkRequiredFlags(flags []Flag, context *Context) requiredFlagsErr {
+	var missingFlags []string
+	for _, f := range flags {
+		if rf, ok := f.(RequiredFlag); ok && rf.IsRequired() {
+			var flagPresent bool
+			var flagName string
+
+			for _, key := range f.Names() {
+				if len(key) > 1 {
+					flagName = key
+				}
+
+				if context.IsSet(strings.TrimSpace(key)) {
+					flagPresent = true
+				}
+			}
+
+			if !flagPresent && flagName != "" {
+				missingFlags = append(missingFlags, flagName)
+			}
+		}
+	}
+
+	if len(missingFlags) != 0 {
+		return &errRequiredFlags{missingFlags: missingFlags}
+	}
+
+	return nil
 }

@@ -2,30 +2,31 @@ package setting
 
 import (
 	"fmt"
+
 	"github.com/astaxie/beego/config"
-	"vueApp/utils"
+	"github.com/wangyanci/coffice/utils"
 )
 
 var Conf config.Configer
 
 var (
-	DataBaseDriver  string
-	DataBaseAddr    string
-	DataBasePort    string
-	DataBaseName    string
-	DataBaseUser    string
-	DataBasePasswd  string
+	DataBaseDriver string
+	DataBaseAddr   string
+	DataBasePort   string
+	DataBaseName   string
+	DataBaseUser   string
+	DataBasePasswd string
 
-	SigningKey      string
+	SigningKey string
 
-	LogAdapter      string
-	LogLevel        int
-	LogCache        int64
-	LogPath         string
+	LogAdapter string
+	LogLevel   int
+	LogCache   int64
+	LogPath    string
 )
 
 func init() {
-//	conf, err := config.NewConfig("ini", "E:\\workspace\\workspace_go\\src\\com.609.huangsewangzhan\\x\\conf\\app.conf")
+	//	conf, err := config.NewConfig("ini", "E:\\workspace\\workspace_go\\src\\com.609.huangsewangzhan\\x\\conf\\app.conf")
 	conf, err := config.NewConfig("ini", "conf/app.conf")
 	if err != nil {
 		fmt.Println(err)

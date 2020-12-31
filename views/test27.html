@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    http://jsrun.net/WJhKp/edit
+    <meta charset="UTF-8">
+    <title>Title</title>
+{{/*    <script href="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"><script>*/}}
+    <style>
+        html,
+        body,
+        div,
+        dl,
+        dt,
+        dd,
+        ul,
+        ol,
+        li,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+            text-decoration: none;
+        }
+
+        .box {
+            margin: 0 auto;
+            width: 840px;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .box a {
+            width: 200px;
+            height: 200px;
+            background: #ddd;
+            display: block;
+            float: left;
+            margin: 10px 0 0 10px;
+            border-radius: 5px;
+        }
+
+        .box a span {
+            width: 200px;
+            height: 200px;
+            line-height: 200px;
+            background: #333;
+            display: block;
+            text-align: center;
+            font-size: 30px;
+            color: #fff;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .box a span.top {
+            animation: top .5s;
+            display: block;
+            transform-origin: top;
+        }
+
+        .box a span.right {
+            animation: right .5s;
+            display: block;
+            transform-origin: right;
+        }
+
+        .box a span.bottom {
+            animation: bottom .5s;
+            display: block;
+            transform-origin: bottom;
+        }
+
+        .box a span.left {
+            animation: left .5s;
+            display: block;
+            transform-origin: left;
+        }
+
+        @keyframes top {
+            from {
+                transform: perspective(1000px) rotateX(180deg);
+            }
+            to {
+                transform: perspective(1000px) rotateX(0deg);
+            }
+        }
+
+        @keyframes right {
+            from {
+                transform: perspective(1000px) rotateY(-180deg);
+            }
+            to {
+                transform: perspective(1000px) rotateY(0deg);
+            }
+        }
+
+        @keyframes bottom {
+            from {
+                transform: perspective(1000px) rotateX(-180deg);
+            }
+            to {
+                transform: perspective(1000px) rotateX(0deg);
+            }
+        }
+
+        @keyframes left {
+            from {
+                transform: perspective(1000px) rotateY(180deg);
+            }
+            to {
+                transform: perspective(1000px) rotateY(0deg);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <a href="#">
+    <span>
+      01
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      02
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      03
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      04
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      05
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      06
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      07
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      08
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      09
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      10
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      11
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      12
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      13
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      14
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      15
+    </span>
+    </a>
+    <a href="#">
+    <span>
+      16
+    </span>
+    </a>
+</div>
+<script>$(function() {
+        var w = $('.box a').width(),
+                h = $('.box a').height(),
+                x,
+                y,
+                n;
+        $('.box a').hover(function(e) {
+                    x = (e.pageX - this.offsetLeft - (w / 2)) * (w > h ? (h / w) : 1);
+                    y = (e.pageY - this.offsetTop - (h / 2)) * (h > w ? (w / h) : 1);
+                    n = Math.round((((Math.atan2(y, x) * (180 / Math.PI)) + 180) / 90) + 3) % 4;
+                    if (n == 0) {
+                        $('span', this).addClass('top');
+                    } else if (n == 1) {
+                        $('span', this).addClass('right');
+                    } else if (n == 2) {
+                        $('span', this).addClass('bottom');
+                    } else if (n == 3) {
+                        $('span', this).addClass('left');
+                    }
+                },
+                function() {
+                    $('span', this).attr('class', '');
+                });
+    });</script>
+</body>
+</html>

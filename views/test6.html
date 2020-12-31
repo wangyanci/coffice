@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    -------scss样式----------
+    <scss>
+        * {
+            box-sizing: inherit;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        :root {
+            --backgroundColor: #000;
+            --borderWidth: 2px;
+            --gradient: linear-gradient(to bottom right,
+            hsl(0deg, 100%, 60%),
+            hsl(120deg, 100%, 60%),
+            hsl(240deg, 100%, 60%),
+            hsl(360deg, 100%, 60%),
+            hsl(120deg, 100%, 60%),
+            hsl(240deg, 100%, 60%),
+            hsl(360deg, 100%, 60%)
+            );
+        }
+
+        @mixin background {
+            background-image: var(--gradient);
+            background-size: 200% 200%;
+            background-position: top left;
+            animation: roll 4s infinite linear;
+        }
+
+        html {
+            box-sizing: border-box;
+            font-family: '华文行楷', 'KaiTi', 'STKaiti', sans-serif;
+            font-size: 62.5%;
+
+        body {
+            padding: 0;
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--backgroundColor);
+            overflow: hidden;
+            font-size: 1.6rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        }
+
+        .card {
+            width: 50vmin;
+            height: 75vmin;
+            padding: 1rem;
+            border: solid var(--borderWidth) transparent;
+            border-radius: 1rem;
+            position: relative;
+            background-color: var(--backgroundColor);
+
+
+        &::after, &::before {
+                       content: '';
+                       display: block;
+                       position: absolute;
+                       top: calc(var(--borderWidth) * -1);
+                       left: calc(var(--borderWidth) * -1);
+                       right: calc(var(--borderWidth) * -1);
+                       bottom: calc(var(--borderWidth) * -1);
+                       margin: calc(var(--borderWidth) * -1);
+                       border-radius: inherit;
+                   @include background;
+                   }
+
+        &::after {
+             z-index: -1;
+         }
+
+        &::before {
+             z-index: -2;
+             filter: blur(2rem);
+             opacity: 0.7;
+         }
+
+        p {
+            margin: 0;
+            color: transparent;
+            display: block;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-clip: text;
+            -webkit-background-clip: text;
+            padding: 2vmin;
+            font-size: calc(1vmin + 1.25rem);
+        @include background;
+            text-align: justify;
+            text-overflow: ellipsis;
+        }
+        }
+
+        @keyframes roll {
+            from {
+                background-position: 0% 0%;
+            }
+
+            to {
+                background-position: 100% 100%;
+            }
+        }
+    </scss>
+</head>
+<body>
+<div class="card">
+    <p>舜发于畎亩之中，傅说举于版筑之中，胶鬲举于鱼盐之中，管夷吾举于士，孙叔敖举于海，百里奚举于市。
+        故天将降大任于斯人也，必先苦其心志，劳其筋骨，饿其体肤，空乏其身，行拂乱其所为，所以动心忍性，曾益其所不能。
+        人恒过，然后能改；困于心，衡于虑，而后作；征于色，发于声，而后喻。入则无法家拂士，出则无敌国外患者，国恒亡。
+        然后知生于忧患，而死于安乐也。</p>
+    <div>
+</body>
+</html>

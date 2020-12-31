@@ -1,9 +1,9 @@
 package router
 
 import (
-	"vueApp/controller"
-	"vueApp/controller/authcontroller"
-	"vueApp/controller/usercontroller"
+	"github.com/wangyanci/coffice/controller"
+	"github.com/wangyanci/coffice/controller/authcontroller"
+	"github.com/wangyanci/coffice/controller/usercontroller"
 
 	"github.com/astaxie/beego"
 )

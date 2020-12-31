@@ -4,10 +4,9 @@ import (
 	"errors"
 	"net/http"
 
-	"vueApp/auth"
-	"vueApp/error"
-	"vueApp/logs"
-	"vueApp/utils"
+	"github.com/wangyanci/coffice/auth"
+	"github.com/wangyanci/coffice/logs"
+	"github.com/wangyanci/coffice/utils"
 
 	"github.com/astaxie/beego/context"
 	"github.com/dgrijalva/jwt-go"
@@ -25,7 +24,7 @@ var skipAuthRouter = map[string]map[string]bool{
 	},
 }
 
-func Identfy(ctx *context.Context){
+func Identfy(ctx *context.Context) {
 	if utils.IsSkipFilterRouter(ctx.Input.URL(), ctx.Input.Method(), skipAuthRouter) {
 		return
 	}

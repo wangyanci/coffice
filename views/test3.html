@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            background: #000000
+        }
+
+        canvas {
+            position: relative; top:50%;
+            left:50%;
+            margin-left:-50vmin;
+            width:100vmin;
+            height:100vmin;
+            overflow:hidden;
+            display: block;
+        }
+    </style>
+    <script>
+        var canvas,ctx,tim;
+        canvas = document.getElementsByTagName('canvas')[0];
+        ctx = canvas.getContext('2d');
+        canvas.width=canvas.height=400;
+        aaa();
+
+        function aaa(){
+            var a,b,c;
+            ctx.fillStyle="rgb(0,0,0)";
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+            tim=new Date().getTime()/30;
+            rol(200,200,tim/13,8,0);
+            requestAnimationFrame(aaa);
+        }
+
+        function rol(tx,ty,r,max,kai){
+            var a,b,c,d,e,x,y,hei,han,ste,p;
+            if(kai>11)return;
+            a=(kai*1117)%360;
+            ctx.fillStyle="hsl("+a+",60%,50%)";
+
+            hei=10;
+            han=50/8*max;
+            p=[];
+            ste=Math.PI*2/max;
+
+            for(a=0;a<max;a++){
+                b=r-ste*0.31;
+                x=Math.cos(b);
+                y=Math.sin(b);
+                p.push([x*(han-hei),y*(han-hei)]);
+                b=r-ste*0.24;
+                x=Math.cos(b);
+                y=Math.sin(b);
+                p.push([x*(han),y*(han)]);
+                b=r-ste*0.13;
+                x=Math.cos(b);
+                y=Math.sin(b);
+                p.push([x*(han+hei),y*(han+hei)]);
+                b=r+ste*0.13;
+                x=Math.cos(b);
+                y=Math.sin(b);
+                p.push([x*(han+hei),y*(han+hei)]);
+                b=r+ste*0.24;
+                x=Math.cos(b);
+                y=Math.sin(b);
+                p.push([x*(han),y*(han)]);
+                b=r+ste*0.31;
+                x=Math.cos(b);
+                y=Math.sin(b);
+                p.push([x*(han-hei),y*(han-hei)]);
+                r+=ste;
+            }
+
+            ctx.beginPath();
+            for(a=0;a<p.length;a++)ctx.lineTo(tx+p[a][0],ty+p[a][1]);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.arc(tx,ty,(han-hei)*0.7,0,Math.PI*2,1);
+            ctx.fill();
+
+            a=-tim/(33+((kai*117)%40))+Math.sin(tim/31+kai*97)/3;
+            b=(max+kai*13)%29;
+            if(b<7)b=7;
+            c=han*(b/max);
+            x=Math.cos(a)*(han+c);
+            y=Math.sin(a)*(han+c);
+            d=1+1/(b/max);
+            e=2;
+            if(b%2==1)e=1;
+            rol(tx+x,ty+y,-r*max/b+a*d+ste*max/b/e,b,kai+1);
+        }
+    </script>
+</head>
+<body>
+
+<canvas></canvas>
+</body>
+</html>

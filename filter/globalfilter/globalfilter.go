@@ -3,8 +3,7 @@ package globalfilter
 import (
 	"errors"
 
-	"vueApp/error"
-	"vueApp/utils"
+	"github.com/wangyanci/coffice/utils"
 
 	"github.com/astaxie/beego/context"
 )
@@ -15,7 +14,7 @@ var skipMediaTypeCheckRouter = map[string]map[string]bool{
 	},
 }
 
-func PreDeal(ctx *context.Context){
+func PreDeal(ctx *context.Context) {
 	ctx.Input.RequestBody = ctx.Input.CopyBody(1024)
 
 	if utils.IsSkipFilterRouter(ctx.Input.URL(), ctx.Input.Method(), skipMediaTypeCheckRouter) {

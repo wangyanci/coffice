@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .boxTitle {
+            font-size: 15px;
+            color: #666;
+        }
+        .boxTitle span{
+            color: #FFF;
+            background: #f30;
+            padding: 0px 5px;
+            border-radius: 10px;
+            font-size: 11px;
+            position: relative;
+            top: -1px;
+        }
+
+        .current {
+            color: #0bb362;
+            border-bottom: 2px solid #0bb362;
+            cursor: pointer;
+            padding: 16px;
+            font-size: 16px;
+            position:relative;
+            width:fit-content;
+        }
+        .current span{
+            position: absolute;
+            display: inline-block;
+            padding: 0 6px;
+            font-size: 10px;
+            text-align: center;
+            background-color: #5cb85c;
+            color: #fff;
+            border-radius: 10px;
+            line-height: 16px;
+            right: 2px;
+            top: 3px;
+        }
+
+        .btn-success {
+            color: #fff;
+            background-color: #5cb85c;
+            cursor: pointer;
+            border: 1px solid #35a735;
+            padding: 1px 5px;
+            font-size: 12px;
+            line-height: 1.5;
+            border-radius: 3px;
+        }
+        .btn-success:hover, .btn-success:focus, .btn-success:active{
+            color: #fff;
+            background-color: #449d44;
+            border-color: #398439;
+        }
+    </style>
+</head>
+<body>
+<p class="boxTitle">
+    股东信息
+    <span>0</span>
+</p>
+
+<div class="current">
+    人员情况
+    <span>100000</span>
+</div>
+
+<button type="button" class="btn-success"  title="">
+    关注&nbsp;
+    <span class="vertical-bar">|</span>&nbsp;3
+</button>
+</body>
+</html>

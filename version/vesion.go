@@ -1,7 +1,7 @@
 package version
 
 var (
-	Version string
+	Version   string
 	GitCommit string
 	BuildDate string
 )

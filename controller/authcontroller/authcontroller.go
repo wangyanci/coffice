@@ -1,39 +1,47 @@
 package authcontroller
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
-	"vueApp/auth"
-	"vueApp/error"
-	"vueApp/logs"
-	"vueApp/model"
-	"vueApp/utils"
-
-	"github.com/astaxie/beego"
+	"github.com/wangyanci/coffice/auth"
+	"github.com/wangyanci/coffice/controller"
+	e "github.com/wangyanci/coffice/exception"
+	"github.com/wangyanci/coffice/logs"
+	"github.com/wangyanci/coffice/model"
 )
 
 type AuthController struct {
-	beego.Controller
+	controller.BaseController
 }
 
-func(this *AuthController) Auth() {
+func (c *AuthController) Auth() {
 	user := model.User{}
-	err := json.Unmarshal(this.Ctx.Input.RequestBody, &user)
+	err := json.Unmarshal(c.Ctx.Input.RequestBody, &user)
 	if err != nil {
 		logs.Logger.Error("authentication failed err: %v", err)
-		utils.ResponseWithError(this.Ctx, error.AUTH_POST_UNMARSHAL_FAIL, err)
+		c.OutputErrorV4Code(e.AUTH_POST_UNMARSHAL_FAIL, err.Error())
 		return
 	}
 
-	toke, err := auth.GetAuthToken(user)
+	if user.DomainName == "" || user.Secret == "" {
+		c.OutputErrorV4Code(e.AUTH_POST_UNMARSHAL_FAIL, err.Error())
+		return
+	}
+
+	if user.DomainName != "wangyanci" || user.Secret != "123456" {
+		c.OutputErrorV4Code(e.AUTH_GET_VALIDATE_FAIL, err.Error())
+		return
+	}
+
+	token, err := auth.GetAuthToken(user)
 	if err != nil {
 		fmt.Println(err)
-		utils.ResponseWithError(this.Ctx, error.AUTH_POST_ENCRYPT_FAIL, err)
+		c.OutputErrorV4Code(e.AUTH_POST_ENCRYPT_FAIL, err.Error())
 		return
 	}
 
-	this.Ctx.ResponseWriter.Header().Set("X-Auth-Token", toke)
-	utils.ResponseWithSuccess(this.Ctx, http.StatusCreated, nil)
+	c.Ctx.ResponseWriter.Header().Set("X-Auth-Token", token)
+	c.OutputSuccess(nil, http.StatusCreated)
 }

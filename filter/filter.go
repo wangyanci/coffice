@@ -1,8 +1,8 @@
 package filter
 
 import (
-	"vueApp/filter/identfyfilter"
-	"vueApp/filter/globalfilter"
+	"github.com/wangyanci/coffice/filter/globalfilter"
+	"github.com/wangyanci/coffice/filter/identfyfilter"
 
 	"github.com/astaxie/beego"
 )

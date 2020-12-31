@@ -3,10 +3,9 @@ package main
 import (
 	"os"
 
-	"vueApp/app"
+	"github.com/wangyanci/coffice/app"
 
 	_ "github.com/lib/pq"
-	_ "vueApp/model"
 )
 
 func main() {

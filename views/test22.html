@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{;margin:0 auto;}
+        #canvas{background:#000;margin:0;display:block;}
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    let h = window.innerHeight, w = window.innerWidth;
+    //w = w  > 540 ? 540 : w;
+    canvas.width = w;
+    canvas.height = h;
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+
+    var Fps = {
+        nc : 0,
+        nt : +new Date,
+        fps : []
+    }
+
+    let Bg =  {
+        particles : [],
+        init : ()=>{
+            var n = 200;
+            while(n--){
+                Bg.particles.push(Bg.setParticle());
+            }
+            Bg.run();
+        },
+        setParticle : ()=>{
+            let x = rand(0,w),y = rand(0,h),r = rand(100,255,1),g = rand(100,255,1),b = rand(100,255,1),a = rand(0,1),vx = rand(0,1,0,1)/3,vy = rand(0,1,0,1)/3;
+            return {
+                x : x,
+                y : y,
+                r : r,
+                g : g,
+                b : b,
+                a : a,
+                vx: vx,
+                vy: vy,
+            }
+        },
+        draw : ()=>{
+            ctx.clearRect(0,0,w,h);
+            var len = Bg.particles.length;
+            for(var x =0;x<len+1;x++){
+                let p = Bg.particles[x];
+                for(var xx = x+1;xx<len;xx++){
+                    let pp = Bg.particles[xx];
+                    //console.log(distance(p.x,p.y,pp.x,pp.y))
+                    var n = 70;
+                    if(w<1200) n=40;
+                    if(w<600) n=20;
+                    if(distance(p.x,p.y,pp.x,pp.y)>n) continue;
+                    ctx.beginPath();
+                    let style = ctx.createLinearGradient(p.x,p.y,pp.x,pp.y);
+                    style.addColorStop(0,"rgba("+p.r+","+p.g+","+p.b+",.3)");
+                    style.addColorStop(1,"rgba("+pp.r+","+pp.g+","+pp.b+",.3)");
+                    ctx.strokeStyle = style;
+                    ctx.moveTo(p.x,p.y);
+                    ctx.lineTo(pp.x,pp.y);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+            }
+            for(let x in Bg.particles){
+                let p = Bg.particles[x];
+                ctx.beginPath();
+                //ctx.fillStyle = "#000";
+                //ctx.arc(p.x,p.y,1,0,Math.PI*2);
+                //ctx.fill();
+                ctx.fillStyle = "rgba("+p.r+","+p.g+","+p.b+","+p.a+")";
+                ctx.arc(p.x,p.y,1,0,Math.PI*2);
+                ctx.fill();
+                ctx.closePath();
+            }
+        },
+        run : ()=>{
+            Bg.draw();
+            for(let x in Bg.particles){
+                let p = Bg.particles[x];
+                p.x+=p.vx;
+                p.y+=p.vy;
+                p.vx = (p.x>=w || p.x<=0) ? -p.vx :p.vx;
+                p.vy = (p.y>=h || p.y<=0) ? -p.vy :p.vy;
+                p.vx = Math.abs(p.vx) > 0.33 ? p.vx/1.01 : p.vx;
+                p.vy = Math.abs(p.vy) > 0.33 ? p.vy/1.01 : p.vy;
+                p.r++;
+                p.g+=2;
+                p.b+=3;
+                p.r = p.r>255 ? 100 : p.r;
+                p.g = p.g>255 ? 100 : p.g;
+                p.b = p.b>255 ? 100 : p.b;
+            }
+            if((+new Date) - Fps.nt>1000){
+                //console.log(Fps.nc)
+                Fps.nc = 0;
+                Fps.nt = +new Date;
+            }
+            Fps.nc++;
+            requestAnimationFrame(()=>{Bg.run()})
+        },
+        tap :(x,y)=>{
+            for(let i in Bg.particles){
+                let v = Bg.particles[i];
+                if(distance(v.x,v.y,x,y)>100) continue;
+                if((v.x-x) * v.vx < 0) v.vx = -v.vx;
+                if((v.y-y) * v.vy < 0) v.vy = -v.vy;
+                v.vx = Math.abs(v.vx)>1 ? v.vx : v.vx*10;
+                v.vy = Math.abs(v.vy)>1 ? v.vy : v.vy*10;
+            }
+        }
+    };
+
+
+    Bg.init();
+
+
+    function rand(a,b,i,z){
+        let x = Math.random()*(b-a)+a;
+        x =  i ? parseInt(x) : x;
+        return  z ? Math.random()>0.5 ? -x : x : x;
+    }
+    function distance(x1,y1,x2,y2){
+        return Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+    }
+    canvas.onclick = function(e){
+        Bg.tap(e.offsetX,e.offsetY);
+    }
+</script>
+</body>
+</html>
