@@ -9,7 +9,7 @@ import (
 )
 
 func InitRouter() {
-	mainController := &controller.MainController{}
+	mainController := &controller.BaseController{}
 	authController := &authcontroller.AuthController{}
 	userController := &usercontroller.UserController{}
 

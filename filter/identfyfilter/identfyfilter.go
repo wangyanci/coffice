@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/wangyanci/coffice/auth"
+	e "github.com/wangyanci/coffice/exception"
 	"github.com/wangyanci/coffice/logs"
 	"github.com/wangyanci/coffice/utils"
 
@@ -33,18 +34,18 @@ func Identfy(ctx *context.Context) {
 	if tokenStr == "" {
 		err := errors.New("the token is empty")
 		logs.Logger.Info("authentication failed err: %v", err)
-		utils.ResponseWithError(ctx, error.AUTH_GET_TOKEN_FAIL, err)
+		utils.OutputErrorV4Code(ctx, e.AUTH_GET_TOKEN_FAIL, err)
 		return
 	}
 
 	token, err := jwt.Parse(tokenStr, auth.Keyfunc)
 	if err != nil {
-		utils.ResponseWithError(ctx, error.AUTH_GET_DECRYPT_FAIL, err)
+		utils.OutputErrorV4Code(ctx, e.AUTH_GET_DECRYPT_FAIL, err)
 		return
 	}
 
 	if !token.Valid {
 		err := errors.New("validate token failed")
-		utils.ResponseWithError(ctx, error.AUTH_GET_VALIDATE_FAIL, err)
+		utils.OutputErrorV4Code(ctx, e.AUTH_GET_VALIDATE_FAIL, err)
 	}
 }

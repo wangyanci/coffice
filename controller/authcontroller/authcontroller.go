@@ -2,6 +2,7 @@ package authcontroller
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -21,24 +22,25 @@ func (c *AuthController) Auth() {
 	err := json.Unmarshal(c.Ctx.Input.RequestBody, &user)
 	if err != nil {
 		logs.Logger.Error("authentication failed err: %v", err)
-		c.OutputErrorV4Code(e.AUTH_POST_UNMARSHAL_FAIL, err.Error())
+		c.OutputErrorV4Code(e.AUTH_POST_UNMARSHAL_FAIL, err)
 		return
 	}
 
 	if user.DomainName == "" || user.Secret == "" {
-		c.OutputErrorV4Code(e.AUTH_POST_UNMARSHAL_FAIL, err.Error())
+		err := errors.New("username or password is empty")
+		c.OutputErrorV4Code(e.AUTH_POST_UNMARSHAL_FAIL, err)
 		return
 	}
 
 	if user.DomainName != "wangyanci" || user.Secret != "123456" {
-		c.OutputErrorV4Code(e.AUTH_GET_VALIDATE_FAIL, err.Error())
+		c.OutputErrorV4Code(e.AUTH_PASSWORD_INVAILD, err)
 		return
 	}
 
 	token, err := auth.GetAuthToken(user)
 	if err != nil {
 		fmt.Println(err)
-		c.OutputErrorV4Code(e.AUTH_POST_ENCRYPT_FAIL, err.Error())
+		c.OutputErrorV4Code(e.AUTH_POST_ENCRYPT_FAIL, err)
 		return
 	}
 

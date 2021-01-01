@@ -2,6 +2,7 @@ package globalfilter
 
 import (
 	"errors"
+	e "github.com/wangyanci/coffice/exception"
 
 	"github.com/wangyanci/coffice/utils"
 
@@ -27,5 +28,5 @@ func PreDeal(ctx *context.Context) {
 	}
 
 	err := errors.New("content type is not application/json")
-	utils.ResponseWithError(ctx, error.GLOBAL_ALL_MEDIA_TYPE_ERROE, err)
+	utils.OutputErrorV4Code(ctx, e.GLOBAL_ALL_MEDIA_TYPE_ERROE, err)
 }

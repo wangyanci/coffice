@@ -2,10 +2,9 @@ package controller
 
 import (
 	"fmt"
-	"net/http"
-
 	"github.com/astaxie/beego"
 	e "github.com/wangyanci/coffice/exception"
+	"github.com/wangyanci/coffice/utils"
 )
 
 type BaseController struct {
@@ -20,26 +19,15 @@ func (c *BaseController) Home() {
 
 //如果不传响应码，则默认使用200，否则只有第一个有效
 func (c *BaseController) OutputSuccess(data interface{}, code ...int) {
-	c.Data["json"] = data
-	c.Ctx.Output.SetStatus(http.StatusOK)
-	if len(code) != 0 {
-		c.Ctx.Output.SetStatus(code[0])
-	}
-
-	c.ServeJSON()
+	utils.OutputSuccess(c.Ctx, data, code...)
 }
 
 //从coffice错误码返回错误信息
-func (c *BaseController) OutputErrorV4Code(code e.ErrorCode, msg ...string) {
-	c.Data["json"] = code.Code2K4SERROR(msg...)
-	c.Ctx.Output.SetStatus(code.CodeInfo(e.STATUSCODE).(int))
-	c.ServeJSON()
+func (c *BaseController) OutputErrorV4Code(code e.ErrorCode, errors ...error) {
+	utils.OutputErrorV4Code(c.Ctx, code, errors...)
 }
 
 //从coffice错误返回错误信息
-func (c *BaseController) OutputError(k4SErr *e.K4SError, msg ...string) {
-
-	c.Data["json"] = k4SErr.AppendMsg(msg...)
-	c.Ctx.Output.SetStatus(k4SErr.Code.CodeInfo(e.STATUSCODE).(int))
-	c.ServeJSON()
+func (c *BaseController) OutputV4Error(k4SErr *e.K4SError, errors ...error) {
+	utils.OutputV4Error(c.Ctx, k4SErr, errors...)
 }
