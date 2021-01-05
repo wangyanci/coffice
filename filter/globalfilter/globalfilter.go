@@ -3,6 +3,7 @@ package globalfilter
 import (
 	"errors"
 	e "github.com/wangyanci/coffice/exception"
+	"strings"
 
 	"github.com/wangyanci/coffice/utils"
 
@@ -18,12 +19,12 @@ var skipMediaTypeCheckRouter = map[string]map[string]bool{
 func PreDeal(ctx *context.Context) {
 	ctx.Input.RequestBody = ctx.Input.CopyBody(1024)
 
-	if utils.IsSkipFilterRouter(ctx.Input.URL(), ctx.Input.Method(), skipMediaTypeCheckRouter) {
+	if utils.IsSkipFilterRouter(ctx, ctx.Input.Method(), skipMediaTypeCheckRouter) {
 		return
 	}
 
 	contentType := ctx.Input.Header("Content-Type")
-	if contentType == "application/json" {
+	if strings.Index(contentType, "application/json") != -1 {
 		return
 	}
 

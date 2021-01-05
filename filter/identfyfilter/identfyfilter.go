@@ -2,6 +2,7 @@ package identfyfilter
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/wangyanci/coffice/auth"
@@ -17,16 +18,20 @@ var skipAuthRouter = map[string]map[string]bool{
 	"/": {
 		"Any": true,
 	},
+	"/healthy": {
+		http.MethodGet: true,
+	},
 	"/v1/auth": {
 		http.MethodPost: true,
 	},
-	"/v1/users": {
-		http.MethodPost: true,
+	"/v1/users/:name:string": {
+		http.MethodGet: true,
 	},
 }
 
 func Identfy(ctx *context.Context) {
-	if utils.IsSkipFilterRouter(ctx.Input.URL(), ctx.Input.Method(), skipAuthRouter) {
+	fmt.Println("url: ", ctx.Input.URL())
+	if utils.IsSkipFilterRouter(ctx, ctx.Input.Method(), skipAuthRouter) {
 		return
 	}
 

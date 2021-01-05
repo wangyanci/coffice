@@ -41,6 +41,7 @@ const (
 
 const (
 	_K4S_NOTFUND        = http.StatusNotFound * 10000000
+	_K4S_CONFLICT       = http.StatusConflict * 10000000
 	_K4S_BADREQUEST     = http.StatusBadRequest * 10000000
 	_K4S_UNAUTHORIZED   = http.StatusUnauthorized * 10000000
 	_K4S_INTERNALERROR  = http.StatusInternalServerError * 10000000
@@ -61,11 +62,16 @@ var (
 	AUTH_POST_UNMARSHAL_FAIL   = _V1(_K4S_BADREQUEST + _MODULEL_AUTH + 006)
 	AUTH_POST_MEDIA_TYPE_ERROE = _V1(_K4S_MEDIATYPEERROR + _MODULEL_AUTH + 007)
 )
+var (
+	USER_NAME_USED = _V1(_K4S_CONFLICT + _MODULEL_USER + 001)
+	USER_NOT_FOUND = _V1(_K4S_NOTFUND + _MODULEL_USER + 002)
+)
 
 //router: /*
 var (
 	GLOBAL_UNKNOWN_ERROE        = _V1(_K4S_INTERNALERROR + _MODULEL_GLOBAL + 000)
-	GLOBAL_ALL_MEDIA_TYPE_ERROE = _V1(_K4S_MEDIATYPEERROR + _MODULEL_GLOBAL + 001)
+	GLOBAL_ROUTE_NOT_FOUND      = _V1(_K4S_NOTFUND + _MODULEL_GLOBAL + 001)
+	GLOBAL_ALL_MEDIA_TYPE_ERROE = _V1(_K4S_MEDIATYPEERROR + _MODULEL_GLOBAL + 002)
 )
 
 var k4SERRORS = map[ErrorCode]*K4SError{
@@ -77,7 +83,11 @@ var k4SERRORS = map[ErrorCode]*K4SError{
 	AUTH_GET_VALIDATE_FAIL:     {Msg: "authentication failed."},
 	AUTH_PASSWORD_INVAILD:      {Msg: "authentication failed, userName or passwd is correct."},
 
-	GLOBAL_UNKNOWN_ERROE: {Msg: "internal error, unknown err occur."},
+	USER_NAME_USED: {Msg: "user is exist."},
+	USER_NOT_FOUND: {Msg: "user not found."},
+
+	GLOBAL_UNKNOWN_ERROE:        {Msg: "internal error, unknown err occur."},
+	GLOBAL_ROUTE_NOT_FOUND:      {Msg: "resource not found."},
 	GLOBAL_ALL_MEDIA_TYPE_ERROE: {Msg: "unsupport media type."},
 }
 
@@ -96,7 +106,7 @@ func (code ErrorCode) CodeInfo(name int) interface{} {
 }
 
 func (code ErrorCode) Code2K4SERROR(errors ...error) *K4SError {
-	k4SERROR := k4SERRORS[code]
+	k4SERROR := &K4SError{Msg: k4SERRORS[code].Msg}
 	if k4SERROR == nil {
 		k4SERROR = k4SERRORS[GLOBAL_UNKNOWN_ERROE]
 	}

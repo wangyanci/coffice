@@ -2,8 +2,10 @@ package usercontroller
 
 import (
 	"fmt"
+	service "github.com/wangyanci/coffice/service/userservice"
 
 	"github.com/wangyanci/coffice/controller"
+	e "github.com/wangyanci/coffice/exception"
 )
 
 type UserController struct {
@@ -11,6 +13,7 @@ type UserController struct {
 }
 
 func (this *UserController) CreateUser() {
+	service.UserService.CreateUser()
 	this.Ctx.WriteString("create user!")
 }
 
@@ -34,4 +37,14 @@ func (this *UserController) UpdateUserById() {
 	id := this.Ctx.Input.Param(":id")
 	resp := fmt.Sprintf("update user by id %s!", id)
 	this.Ctx.WriteString(resp)
+}
+
+func (this *UserController) IsUserExist() {
+	name := this.Ctx.Input.Param(":name")
+	if name == "wangyanci" {
+		this.OutputErrorV4Code(e.USER_NAME_USED)
+		return
+	}
+
+	this.OutputSuccess(nil)
 }

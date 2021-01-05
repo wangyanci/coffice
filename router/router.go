@@ -9,11 +9,12 @@ import (
 )
 
 func InitRouter() {
-	mainController := &controller.BaseController{}
+	baseController := &controller.BaseController{}
 	authController := &authcontroller.AuthController{}
 	userController := &usercontroller.UserController{}
 
-	beego.Router("/", mainController, "*:Home")
+	beego.Router("/", baseController, "*:Version")
+	beego.Router("/healthy", baseController, "*:Health")
 
 	v1 := beego.NewNamespace("v1",
 		beego.NSNamespace("/auth",
@@ -23,11 +24,14 @@ func InitRouter() {
 		beego.NSNamespace("/users",
 			beego.NSRouter("/", userController, "post:CreateUser"),
 			beego.NSRouter("/", userController, "get:ListUser"),
-			beego.NSRouter("/:id", userController, "get:GetUserById"),
-			beego.NSRouter("/:id", userController, "delete:DeleteUserById"),
-			beego.NSRouter("/:id", userController, "put:UpdateUserById"),
+			beego.NSRouter("/:id:int", userController, "get:GetUserById"),
+			beego.NSRouter("/:name:string", userController, "get:IsUserExist"),
+			beego.NSRouter("/:id:int", userController, "delete:DeleteUserById"),
+			beego.NSRouter("/:id:int", userController, "put:UpdateUserById"),
 		),
 	)
 
+
 	beego.AddNamespace(v1)
+	beego.Router("*", baseController, "*:NotFound" )
 }
