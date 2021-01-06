@@ -7,7 +7,7 @@ import (
 type User struct {
 	Age         int    `json:"age" orm:"column(age)"`
 	Secret      string `json:"password" orm:"column(secret)"`
-	DomainId    string `json:"domain_id" orm:"column(domain_id);pk"`
+	DomainId    int `json:"domain_id" orm:"column(domain_id);pk;auto"`
 	DomainName  string `json:"userName" orm:"column(domain_name)"`
 	Telephone   string `json:"telephone" orm:"column(telephone);null"`
 	Email       string `json:"email" orm:"column(email); null"`

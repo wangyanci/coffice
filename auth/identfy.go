@@ -10,7 +10,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func GetAuthToken(user model.User) (string, error) {
+func GetAuthToken(user *model.User) (string, error) {
 	claims := model.ServerClaims{
 		Secret:     user.Secret,
 		DomainID:   user.DomainId,

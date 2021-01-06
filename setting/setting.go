@@ -27,13 +27,12 @@ var (
 
 func init() {
 	//	conf, err := config.NewConfig("ini", "E:\\workspace\\workspace_go\\src\\com.609.huangsewangzhan\\x\\conf\\app.conf")
-	conf, err := config.NewConfig("ini", "conf/app.conf")
+	var err error
+	Conf, err = config.NewConfig("ini", "conf/app.conf")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-
-	Conf = conf
 
 	InitDBConfig()
 	InitAuthConfig()

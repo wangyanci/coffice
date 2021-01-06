@@ -32,7 +32,7 @@ func (c *BaseController)Health() {
 	c.OutputSuccess(nil)
 }
 
-func (c *BaseController)NotFound() {
+func (c *BaseController)NotFound()  {
 	c.OutputErrorV4Code(e.GLOBAL_ROUTE_NOT_FOUND)
 }
 

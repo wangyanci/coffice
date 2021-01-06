@@ -5,7 +5,7 @@ import (
 )
 
 type ServerClaims struct {
-	DomainID   string `json:"userId"`
+	DomainID   int `json:"userId"`
 	DomainName string `json:"userName"`
 	Secret     string `json:"password"`
 	jwt.StandardClaims

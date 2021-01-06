@@ -24,6 +24,9 @@ var skipAuthRouter = map[string]map[string]bool{
 	"/v1/auth": {
 		http.MethodPost: true,
 	},
+	"/v1/users": {
+		http.MethodPost: true,
+	},
 	"/v1/users/:name:string": {
 		http.MethodGet: true,
 	},

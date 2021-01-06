@@ -2,8 +2,9 @@ package authcontroller
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
+	"github.com/wangyanci/coffice/service/userservice"
+	v "github.com/wangyanci/coffice/utils/validation"
 	"net/http"
 
 	"github.com/wangyanci/coffice/auth"
@@ -17,23 +18,30 @@ type AuthController struct {
 	controller.BaseController
 }
 
-func (c *AuthController) Auth() {
-	user := model.User{}
-	err := json.Unmarshal(c.Ctx.Input.RequestBody, &user)
+func (c *AuthController) Auth()  {
+	user := &model.User{}
+	err := json.Unmarshal(c.Ctx.Input.RequestBody, user)
 	if err != nil {
 		logs.Logger.Error("authentication failed err: %v", err)
 		c.OutputErrorV4Code(e.AUTH_POST_UNMARSHAL_FAIL, err)
 		return
 	}
 
-	if user.DomainName == "" || user.Secret == "" {
-		err := errors.New("username or password is empty")
-		c.OutputErrorV4Code(e.AUTH_POST_UNMARSHAL_FAIL, err)
+
+	fieldErr := v.ValidateUser(user)
+	if fieldErr != nil {
+		c.OutputErrorV4Code(e.GLOBAL_REQUEST_PARAM_INVALID, fieldErr)
 		return
 	}
 
-	if user.DomainName != "wangyanci" || user.Secret != "123456" {
-		c.OutputErrorV4Code(e.AUTH_PASSWORD_INVAILD, err)
+	ok, k4sErr := userservice.UserService.ValidateUser(user)
+	if k4sErr != nil {
+		c.OutputErrorV4Code(e.AUTH_VALIDATE_INTERNAL_ERROR, err)
+		return
+	}
+
+	if !ok {
+		c.OutputErrorV4Code(e.AUTH_PASSWORD_INVAILD)
 		return
 	}
 

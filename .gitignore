@@ -7,3 +7,7 @@ ReadeMe
 test_*.go
 *_test.go
 609.log
+.idea
+go_build_main_go
+test
+coffice.log

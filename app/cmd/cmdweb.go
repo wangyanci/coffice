@@ -46,6 +46,7 @@ func InitOrm() {
 	orm.DefaultTimeLoc = time.UTC
 	orm.RegisterDriver(setting.DataBaseDriver, DRIVER)
 	orm.RegisterDataBase("default", setting.DataBaseDriver, DNS)
+
 	//orm.RegisterDataBase("default", setting.DataBaseDriver, "user=postgres password=postgres dbname=postgres host=192.168.76.3 port=5432 sslmode=disable")
 	//to sure execute RunSyncdb after RegisterDriver and RegisterDataBase, rhen: must have one register DataBase alias named `default
 	orm.RunSyncdb("default", false, true)
@@ -64,7 +65,7 @@ func RunWebApp(c *cli.Context) error {
 	//路由匹配信息是否输出到控制台
 	beego.BConfig.Log.AccessLogs = true
 	beego.BConfig.Log.Outputs = map[string]string{"console": ""}
-	//InitOrm()
+	InitOrm()
 	filter.InitFilter()
 	router.InitRouter()
 	beego.Run()

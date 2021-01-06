@@ -21,6 +21,15 @@ type transactionManager struct {
 	params []reflect.Value
 }
 
+type Filters map[string][]interface{}
+
+//func Model2Filters(model interface{}, columns ...string) Filters {
+//	tp := reflect.TypeOf(model)
+//	v := reflect.ValueOf(model)
+//
+//	if
+//}
+
 func (t *transactionManager) invoke(fn interface{}, daos ...interface{}) *transactionManager {
 	tp := reflect.TypeOf(fn)
 	t.fn = reflect.ValueOf(fn)
